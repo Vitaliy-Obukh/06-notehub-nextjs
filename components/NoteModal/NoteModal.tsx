@@ -1,49 +1,49 @@
-import { useEffect } from "react";
-import { createPortal } from "react-dom";
-import NoteForm from "../NoteForm/NoteForm";
-
-import css from "./NoteModal.module.css";
+import css from './NoteModal.module.css';
+import NoteForm from '../NoteForm/NoteForm';
+import { createPortal } from 'react-dom';
+import { useEffect } from 'react';
 
 interface NoteModalProps {
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
 export default function NoteModal({ onClose, onSuccess }: NoteModalProps) {
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
-    document.body.style.overflow = "hidden";
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "auto";
-    };
-  }, [onClose]);
-
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
     }
   };
 
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEsc);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+      document.body.style.overflow = '';
+    };
+  }, [onClose]);
+
   return createPortal(
     <div
       className={css.backdrop}
+      onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
-      onClick={handleBackdropClick}
     >
       <div className={css.modal}>
-        {<NoteForm onClose={onClose} onSuccess={onSuccess} />}
+        <NoteForm onClose={onClose} onSuccess={onSuccess} />
       </div>
     </div>,
     document.body
   );
 }
+
+

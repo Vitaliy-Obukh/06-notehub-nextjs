@@ -1,8 +1,12 @@
-import axios from 'axios';
-import type { Note, NewNoteData } from '../types/note';
+import axios from "axios";
+import type { Note, NewNoteData } from "../types/note";
 
-const BASE_URL = 'https://notehub-public.goit.study/api/notes';
+const BASE_URL = "https://notehub-public.goit.study/api/notes";
 const TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
+
+if (!TOKEN) {
+  throw new Error("NEXT_PUBLIC_NOTEHUB_TOKEN is not defined in environment variables");
+}
 
 const noteServiceClient = axios.create({
   baseURL: BASE_URL,
@@ -28,6 +32,12 @@ export const fetchNotes = async (
   return res.data;
 };
 
+export interface FetchNotesParams {
+  page?: number;
+  search?: string;
+  perPage?: number;
+}
+
 export const createNote = async (noteData: NewNoteData): Promise<Note> => {
   const res = await noteServiceClient.post<Note>('/', noteData);
   return res.data;
@@ -38,7 +48,8 @@ export const deleteNote = async (noteId: number): Promise<Note> => {
   return res.data;
 };
 
-export const fetchNoteById = async (id: string): Promise<Note> => {
+export const fetchNoteById = async (id: number): Promise<Note> => {
   const res = await noteServiceClient.get<Note>(`/${id}`);
   return res.data;
 };
+

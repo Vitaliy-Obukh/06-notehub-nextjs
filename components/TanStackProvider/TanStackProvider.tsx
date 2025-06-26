@@ -3,13 +3,12 @@
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-//git ignors register
 
 type Props = {
   children: React.ReactNode;
-};
+}
 
-const TanStackProvider = ({ children }: Props) => {
+export default function TanStackProvider ({ children }: Props) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
@@ -17,6 +16,7 @@ const TanStackProvider = ({ children }: Props) => {
       {children}
     </QueryClientProvider>
   );
-};
+}
 
-export default TanStackProvider;
+
+

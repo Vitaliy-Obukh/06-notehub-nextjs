@@ -7,12 +7,17 @@ type Props = {
 };
 
 const NoteDetails = async ({ params }: Props) => {
-  const { id }  = await params;
+  const { id } = await params;
+  const noteId = Number(id);
+  if (isNaN(noteId)) {
+    throw new Error(`Invalid note ID: ${id}`);
+  }
+
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["note", id],
-    queryFn: () => fetchNoteById(id),
+    queryKey: ["note", noteId],
+    queryFn: () => fetchNoteById(noteId),
   });
 
   return (
@@ -23,3 +28,4 @@ const NoteDetails = async ({ params }: Props) => {
 };
 
 export default NoteDetails;
+

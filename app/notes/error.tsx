@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 type Props = {
   error: Error;
@@ -13,3 +13,4 @@ const Error = ({ error }: Props) => {
 }
 
 export default Error;
+
